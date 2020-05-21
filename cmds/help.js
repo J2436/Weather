@@ -1,12 +1,12 @@
 const menus = {
   main: `
       outside [command] <options>
-  
+      
       today .............. show weather for today
       forecast ........... show 7 day forecast
       version ............ show package version
-      help ............... show help menu for a command`,
-
+      help ............... show help menu for a command
+      `,
   today: `
       outside today <options>
       --location, -l ..... the location to use`,
