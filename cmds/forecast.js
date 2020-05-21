@@ -1,20 +1,17 @@
-module.exports = (args) => {
-const https = require('https');
-
-https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
-  let data = '';
-
-  // A chunk of data has been recieved.
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
-
-  // The whole response has been received. Print out the result.
-  resp.on('end', () => {
-    console.log(JSON.parse(data).explanation);
-  });
-
-}).on("error", (err) => {
-  console.log("Error: " + err.message);
-});
-}
+const axios = require("axios");
+module.exports = async (args) => {
+  const location = args.location || args.l;
+  const { lon, lat } = await require("../utils/getToday")(location).then(
+    (data) => {
+      return data.coord;
+    }
+  );
+  const forecast = await require("../utils/getForecast")({ lon, lat });
+  for (let day of forecast.daily) {
+    console.log(new Date(day.dt * 1000).toDateString());
+    console.log(` Morning:  ${day.temp.morn}°F`);
+    console.log(` Day    :  ${day.temp.day}°F`);
+    console.log(` Evening:  ${day.temp.eve}°F`);
+    console.log(` Night  :  ${day.temp.night}°F\n`);
+  }
+};
